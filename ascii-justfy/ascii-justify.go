@@ -40,6 +40,24 @@ func PrintAscii(strToConvert string, symbolsArray []string, whiteSpace int) {
 	}
 }
 
+
+func PrintJustifyedAscii(strToConvert string, symbolsArray []string, whiteSpace int) {
+	for i := 0; i <= 8; i++ {
+		for _, letter := range strToConvert {
+			if letter == ' ' {
+				for l := 0; l <whiteSpace; l++ {
+					fmt.Print(" ")
+				}
+				continue
+			}
+			index := int(rune(letter)-32)*9
+			fmt.Print(symbolsArray[index+i])
+		}
+			fmt.Println()
+	}
+}
+
+
 func AlignChoose(terminalWidth int, strLength int, align string, strToConvert string, symbolsArray []string) {
 	if align == "center" {
 		whiteSpace := (terminalWidth - strLength)/2
@@ -51,24 +69,9 @@ func AlignChoose(terminalWidth int, strLength int, align string, strToConvert st
 		PrintAscii(strToConvert, symbolsArray, whiteSpace)
 	} else if align == "justify"{
 		strArr := strings.Split(strToConvert, " ")
-		whiteSpace := ((terminalWidth - strLength)/len(strArr))/7
-		var finalString string
-		for index, item := range strArr {
-			if index == 0 {
-				finalString = item
-				continue
-			}
-			if index == len(strArr) {
-				finalString = finalString + item
-				break	
-			}
-			for i:= 0; i < whiteSpace; i++ {
-				finalString = finalString + " "
-			}
-			finalString = finalString + item
-
-		}
-		PrintAscii(finalString, symbolsArray, whiteSpace )
+		whiteSpace := (terminalWidth - strLength)/(len(strArr)-1)
+		whiteSpace += 6
+		PrintJustifyedAscii(strToConvert, symbolsArray, whiteSpace )
 	}
 }
 
