@@ -16,7 +16,7 @@ func rgbGenerator(color string) (string,string,string) {
 		case "blue": return "0","0","255"
 		case "magenta": return "255","0","255"
 		case "cyan": return "0","255","255"
-		case "orange": return "0","0","0"
+		case "orange": return "255","140","0"
 	}	
 	return "255","255","255 "
 }
