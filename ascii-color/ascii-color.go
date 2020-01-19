@@ -7,18 +7,18 @@ import(
 	"fmt"
 )
 
-func rgbGenerator(color string) string {
+func rgbGenerator(color string) (string,string,string) {
 	switch color{
-		case "black": return "0"
-		case "red": return "1"
-		case "green": return "2"
-		case "yellow": return "3"
-		case "blue": return "4"
-		case "magenta": return "5"
-		case "cyan": return "6"
-		case "orange": return "2"
+		case "black": return "0","0","0"
+		case "red": return "2","255","0"
+		case "green": return "0","255","0"
+		case "yellow": return "255","255","0"
+		case "blue": return "0","0","255"
+		case "magenta": return "255","0","255"
+		case "cyan": return "0","255","255"
+		case "orange": return "0","0","0"
 	}	
-	return "7"
+	return "255","255","255 "
 }
 
 func PrintWord(word string, asciiArt []string, color string, slice string, startIndexToColor int) {
@@ -28,20 +28,20 @@ func PrintWord(word string, asciiArt []string, color string, slice string, start
 			index := int(rune(letter)-32)*9
 			if startIndexToColor == -1 {
 				if slice == "" {
-					genColor := rgbGenerator(color)
-					fmt.Printf("\x1b[3"+ genColor +"m"+asciiArt[index+i])
+					r,g,b := rgbGenerator(color)
+					fmt.Printf("\033[38;2"+r+";"+g+";"+b+"m"+asciiArt[index+i])
 				} else {
-					fmt.Printf("\x1b[37m"+asciiArt[index+i])	
+					fmt.Printf("\033[38;2;255;255;255m"+asciiArt[index+i])
 				}
 
 				continue			
 			}
 
 			if indexOfWord >= startIndexToColor && indexOfWord < len(slice)+startIndexToColor || startIndexToColor == 0 && slice==""{
-				genColor := rgbGenerator(color)
-				fmt.Printf("\x1b[3"+ genColor +"m"+asciiArt[index+i])
+				r,g,b := rgbGenerator(color)
+				fmt.Printf("\033[38;2;"+r+";"+g+";"+b+"m"+asciiArt[index+i])
 			} else {
-				fmt.Printf("\x1b[37m"+asciiArt[index+i])	
+				fmt.Printf("\033[38;2;255;255;255m"+asciiArt[index+i])
 			}
 
 
