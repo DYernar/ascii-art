@@ -10,7 +10,7 @@ import(
 func rgbGenerator(color string) (string,string,string) {
 	switch color{
 		case "black": return "0","0","0"
-		case "red": return "2","255","0"
+		case "red": return "255","0","0"
 		case "green": return "0","255","0"
 		case "yellow": return "255","255","0"
 		case "blue": return "0","0","255"
