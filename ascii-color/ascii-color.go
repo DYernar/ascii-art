@@ -33,7 +33,6 @@ func PrintWord(word string, asciiArt []string, color string, slice string, start
 				} else {
 					fmt.Printf("\033[38;2;255;255;255m"+asciiArt[index+i])
 				}
-
 				continue			
 			}
 
