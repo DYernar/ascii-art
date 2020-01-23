@@ -76,12 +76,6 @@ func AlignChoose(terminalWidth int, strLength int, align string, strToConvert st
 		strArr := strings.Split(strToConvert, " ")
 		whiteSpace := (terminalWidth - strLength)/(len(strArr)-1)
 		odd := (terminalWidth - strLength-((len(strArr)-1)*whiteSpace))
-		fmt.Println(terminalWidth)
-		fmt.Println(strLength)
-		fmt.Println(len(strArr))
-		fmt.Println(whiteSpace)
-		
-		fmt.Println(odd)
 		PrintJustifyedAscii(strToConvert, symbolsArray, whiteSpace, odd)
 	}
 }
