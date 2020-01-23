@@ -59,6 +59,7 @@ func PrintJustifyedAscii(strToConvert string, symbolsArray []string, whiteSpace 
 
 
 func AlignChoose(terminalWidth int, strLength int, align string, strToConvert string, symbolsArray []string) {
+	arguments := strings.Split(strToConvert, " ")
 	if align == "center" {
 		whiteSpace := (terminalWidth - strLength)/2
 		PrintAscii(strToConvert, symbolsArray, whiteSpace)
@@ -66,6 +67,9 @@ func AlignChoose(terminalWidth int, strLength int, align string, strToConvert st
 		PrintAscii(strToConvert, symbolsArray, 0)
 	} else if align == "right" {
 		whiteSpace := terminalWidth - strLength
+		PrintAscii(strToConvert, symbolsArray, whiteSpace)
+	} else if align=="justify" && len(arguments) == 1 {
+		whiteSpace := (terminalWidth - strLength)/2
 		PrintAscii(strToConvert, symbolsArray, whiteSpace)
 	} else if align == "justify"{
 		strArr := strings.Split(strToConvert, " ")
