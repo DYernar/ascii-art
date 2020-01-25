@@ -90,4 +90,4 @@ func main() {
 	}
 	startIndexToColor := strings.Index(strToConvert, slice)
 	PrintWord(strToConvert, asciiSymb, color, slice, startIndexToColor)
-}
+}                  
