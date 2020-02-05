@@ -11,6 +11,10 @@ import (
 	
 )
 
+type data struct {
+	AsciiArt string
+}
+
 func PrintWord(w http.ResponseWriter, word string, asciiArt []string) string {
 	str := ""
 	for i := 1; i <= 8; i++ {
@@ -25,10 +29,10 @@ func PrintWord(w http.ResponseWriter, word string, asciiArt []string) string {
 	return str
 }
 
-func GetAscii(w http.ResponseWriter, input string ) string {
+func GetAscii(w http.ResponseWriter, input string, banner string ) string {
 	var asciiArt []string
 
-	file, err := os.Open("standard.txt")
+	file, err := os.Open(banner+".txt")
 
 	if err != nil {
 		fmt.Println("error opening file : " + err.Error())
@@ -57,16 +61,23 @@ func getText(w http.ResponseWriter, r *http.Request) {
 		for _, str := range r.Form["text"] {
 			newStr += str
 		}
-		str := GetAscii(w, newStr)
+		banner := ""
+		for _, str := range r.Form["banner"] {
+			banner += str
+		}
+		if banner == "" {
+			banner = "standard"
+		}
+		str := GetAscii(w, newStr,banner)
 		fmt.Fprintf(w, str)
 	} else {
-		t, _ := template.ParseFiles("index.gtpl")
+		t, _ := template.ParseFiles("index.html")
 		t.Execute(w, nil)
 	}
 }
 
 func Form(w http.ResponseWriter, r *http.Request ) {
-	t, _ := template.ParseFiles("index.gtpl")
+	t, _ := template.ParseFiles("index.html")
 	t.Execute(w, nil)
 }
 
