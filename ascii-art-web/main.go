@@ -21,7 +21,7 @@ func PrintWord(w http.ResponseWriter, word string, asciiArt []string) (string, e
 	for i := 1; i <= 8; i++ {
 		for _, letter := range word{
 			index := int(rune(letter)-32)*9
-			if index+i >= len(asciiArt) {
+			if index+i >= len(asciiArt) || index+i < 0 {
 				return "", errors.New("out of range")
 			}
 			str = str + asciiArt[index+i]
