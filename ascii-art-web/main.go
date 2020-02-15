@@ -62,42 +62,55 @@ func GetAscii(w http.ResponseWriter, input string, banner string ) (string, erro
 
 func getText(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/" {
-		w.WriteHeader(200)
 		if r.Method == "POST" {
+			w.WriteHeader(200)
 			r.ParseForm()
-			newStr := ""
-			fmt.Println(r.Form["text"])
-			for _, str := range r.Form["text"] {
-				newStr += str
-			}
-			banner := ""
-			for _, str := range r.Form["banner"] {
-				banner += str
-			}
-			if banner == "" {
-				banner = "standard"
-			}
+			newStr := r.FormValue("text")
+			finalStr := ""
+			for index, symb := range newStr {
+				if symb == 13 && newStr[index+1] == 10 {
+					finalStr = finalStr + string(92) + string(110)
+					continue
+				}
+				if symb==10 {
+					continue
+				}
+				finalStr += string(symb)
 
-			str, err := GetAscii(w, newStr,banner)
+			} 
+
+			banner := r.FormValue("banner")
+			log.Println(banner)
+			str, err := GetAscii(w, finalStr,banner)
 			if err != nil {
+				w.WriteHeader(500)
 				t, _ :=template.ParseFiles("error500.html")
 				t.Execute(w, nil)
 			} else {
-				fmt.Fprintf(w, str)
+				newData := data {
+					AsciiArt: str,
+				}
+				fmt.Println(newData.AsciiArt)
+				fmt.Print(str)
+
+				t, _ := template.ParseFiles("index.html")
+				t.Execute(w, newData)
 			}
 		} else if r.Method == "GET" {
+			w.WriteHeader(200)
+
 			w.Header().Set("Content-Type", "text/html")		
 			t, _ := template.ParseFiles("index.html")
 			t.Execute(w, nil)
 		} else {
+			w.WriteHeader(400)
 			w.Header().Set("Content-Type", "text/html")		
-			w.WriteHeader(http.StatusNotImplemented)
 			t, _ :=template.ParseFiles("error400.html")
 			t.Execute(w, nil)
 		}
 	} else {
 		w.Header().Set("Content-Type", "text/html")		
-		w.WriteHeader(http.StatusNotFound)
+		w.WriteHeader(404)
 		t, _ := template.ParseFiles("error404.html")
 		t.Execute(w, nil)
 	}
