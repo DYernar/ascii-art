@@ -1,0 +1,11 @@
+.main-div {
+    width: 100%;
+}
+
+.headerText {
+    color: darkblue;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-align: center;
+    font-family: 'Lemonada', cursive;
+}
