@@ -89,14 +89,24 @@
                         <option value="thinkertoy">thinkertoy</option>
                         <option value="shadow">shadow</option>
                     </select>
-
                 </div>
 
-                <input type="submit" value="GetAscii" download>
+                <input type="submit" value="submit" download>
 
             </form>
 
-                <a href="output.txt" download>Export file</a>
+            <form action="/output" method="post">
+                <div class="selector">
+                    <select name="format">
+                        <option value="pdf">pdf</option>
+                        <option value="txt">txt</option>
+                    </select>
+                </div>
+
+                <input type="submit" value="download" download>
+
+            </form>
+                
             
         </div>
     </div>

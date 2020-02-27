@@ -9,7 +9,7 @@ import (
 	"bufio"
 	"strings"
 	"errors"
-	
+	"strconv"
 )
 
 var GlobalAsciiArt string
@@ -84,7 +84,6 @@ func GetAscii(w http.ResponseWriter, input string, banner string ) (string, erro
 func getText(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/" {
 		if r.Method == "POST" {
-			w.WriteHeader(200)
 			r.ParseForm()
 			newStr := r.FormValue("text")
 			finalStr := ""
@@ -108,6 +107,13 @@ func getText(w http.ResponseWriter, r *http.Request) {
 				t, _ :=template.ParseFiles("error500.html")
 				t.Execute(w, nil)
 			} else {
+				w.WriteHeader(200)
+
+				w.Header().Add("Content-Disposition", "attachment; filename=output.txt")
+				w.Header().Add("Content-Type", "text/html")		
+				w.Header().Add("Content-Length", strconv.Itoa(len(GlobalAsciiArt)))
+
+
 				newData := data {
 					AsciiArt: str,
 				}
@@ -119,7 +125,6 @@ func getText(w http.ResponseWriter, r *http.Request) {
 			}
 		} else if r.Method == "GET" {
 			w.WriteHeader(200)
-
 			w.Header().Set("Content-Type", "text/html")		
 			t, _ := template.ParseFiles("index.html")
 			t.Execute(w, nil)
@@ -138,12 +143,43 @@ func getText(w http.ResponseWriter, r *http.Request) {
 }
 
 func output(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, GlobalAsciiArt)
+	if r.URL.Path == "/output" {
+		if r.Method == "POST" {
+			r.ParseForm()
+			format := r.FormValue("format")
+			if format == "txt" {
+				w.Header().Set("Content-Disposition", "attachment; filename=output.txt")
+				w.Header().Set("Content-Length", strconv.Itoa(len(GlobalAsciiArt)))
+				fmt.Fprintf(w, GlobalAsciiArt)
+			} else if format == "pdf" {
+				w.Header().Set("Content-Disposition", "attachment; filename=output.pdf")
+				w.Header().Set("Content-Length", strconv.Itoa(len(GlobalAsciiArt)))
+				fmt.Fprintf(w, GlobalAsciiArt)
+			} else {
+				w.WriteHeader(400)
+				w.Header().Set("Content-Type", "text/html")		
+				t, _ :=template.ParseFiles("error400.html")
+				t.Execute(w, nil)
+			}
+
+		} else {
+			w.WriteHeader(400)
+			w.Header().Set("Content-Type", "text/html")		
+			t, _ :=template.ParseFiles("error400.html")
+			t.Execute(w, nil)
+		}
+	} else {
+		w.Header().Set("Content-Type", "text/html")		
+		w.WriteHeader(404)
+		t, _ := template.ParseFiles("error404.html")
+		t.Execute(w, nil)
+	}
+
 }
 
 func main() {
     http.HandleFunc("/", getText)
-    http.HandleFunc("/output.txt", output)
+    http.HandleFunc("/output", output)
     err := http.ListenAndServe(":9090", nil) // setting listening port
     if err != nil {
         log.Fatal("ListenAndServe: ", err)
